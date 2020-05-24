@@ -28,6 +28,12 @@ def moveShips(player1, player2, keys):
 	if keys[K_RIGHT]:
 		player2.move("UP")
 
+	sprintL = keys[K_LSHIFT]
+	sprintR = keys[K_RSHIFT]
+	
+	player1.sprint(sprintL, 5)	
+	player2.sprint(sprintR, 5)
+
 def shoots(player1, player2, keys):
 	shells = []
 	if keys[K_w]:
@@ -47,6 +53,16 @@ def shoots(player1, player2, keys):
 
 	if keys[K_DOWN]:
 		projectile = player2.shootHarmonic()
+		if projectile is not None:
+			shells.append(projectile)
+
+	if keys[K_e]:
+		projectile = player1.shootSlippery()
+		if projectile is not None:
+			shells.append(projectile)
+
+	if keys[K_KP0]:
+		projectile = player2.shootSlippery()
 		if projectile is not None:
 			shells.append(projectile)
 

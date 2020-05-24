@@ -27,12 +27,14 @@ def moveShips(player1, player2, keys):
 
 	if keys[K_RIGHT]:
 		player2.move("UP")
-
-	sprintL = keys[K_LSHIFT]
-	sprintR = keys[K_RSHIFT]
 	
-	player1.sprint(sprintL, 5)	
-	player2.sprint(sprintR, 5)
+	player1.sprint(keys[K_LSHIFT], 5)	
+	player2.sprint(keys[K_RSHIFT], 5)
+
+	player1.reduction(keys[K_f])
+	player2.reduction(keys[K_l])
+
+
 
 def shoots(player1, player2, keys):
 	shells = []

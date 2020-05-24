@@ -3,8 +3,14 @@ from harmonicProjectile import *
 from slipperyProjectile import *
 import pygame
 
-def timeInRange(timeInSprint, maxTime):
-	return timeInSprint <= maxTime
+def timeInRange(time, maxTime):
+	return time <= maxTime
+
+def timeInRangeMin(time, minTime):
+	return time <= minTime
+
+def reduceTime(timeToDecrease, ship):
+	timeToDecrease -= ship.timeInReductionClock.tick()
 
 class Ship(object):
 	def __init__(self, direction):
@@ -18,9 +24,13 @@ class Ship(object):
 		if direction == "Right":			
 			self.position = [30, 277]
 			self.skin = pygame.image.load("Ships/ShipSkin.png")
+			
 		else:
 			self.position = [670, 277]
 			self.skin = pygame.image.load("Ships/ShipSkin.png")
+		
+		self.basicSkin = self.skin
+		self.reducedSkin = pygame.transform.scale(self.basicSkin, (50,20))
 
 		self.rect = None
 		self.sprintingTime = 0
@@ -28,6 +38,12 @@ class Ship(object):
 		self.sprinting = False
 		self.resting = False
 		self.sprintClock = pygame.time.Clock()
+		self.timeReductionClock = pygame.time.Clock()
+		self.timeLeftToReduction = 0
+		self.inReduction = False
+		self.timeInReduction = 0
+		self.reductionDurationTime = 500
+		self.timeToUseReductionAgain = 600
 		
 
 	def move(self, direction):
@@ -75,7 +91,6 @@ class Ship(object):
 				self.resting = False
 				self.sprintingTime = 0
 
-
 	def shoot(self):
 		tick = self.attackTimer.tick()
 		self.timeSinceLastShot += tick
@@ -113,6 +128,33 @@ class Ship(object):
 
 		else:
 			self.sprintingTime -= timeSinceLastCall
+
+	def reduction(self, key):
+		tick = self.timeReductionClock.tick()
+		if key and timeInRange(self.timeLeftToReduction, 0) and not self.inReduction:
+			self.skin = self.reducedSkin
+			self.inReduction = True
+			self.increaseTimeInReduction(tick)
+
+
+		elif self.inReduction and self.timeInReduction >= self.reductionDurationTime:
+			self.skin = self.basicSkin
+			self.inReduction = False
+			self.timeInReduction = 0
+			self.timeLeftToReduction = self.timeToUseReductionAgain
+
+
+		elif not timeInRange(self.timeLeftToReduction, 0) and not self.inReduction:
+			self.reduceTimeLeftToReduction(tick)
+		
+		elif self.inReduction:			
+			self.increaseTimeInReduction(tick)
+		
+	def increaseTimeInReduction(self, tickTime):
+		self.timeInReduction += tickTime
+
+	def reduceTimeLeftToReduction(self, tickTime):
+		self.timeLeftToReduction -= tickTime
 
 
 

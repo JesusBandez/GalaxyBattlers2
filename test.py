@@ -1,14 +1,18 @@
-import pygame
-from pygame.locals import *
-import time
-pygame.init()
+class A(object):
+    def __init__(self, f):
+        self.a = f 
 
-reloj = pygame.time.Clock()
+    def a(self):
+        raise Exception("No hay funcion asignada")
 
+def fNueva():
+    print("El nuevo")
 
-while True:
+def fNueva2():
+    print("El raro")
 
-	time.sleep(1)
-	reloj.tick()
+x = A(fNueva2)
+b = A(fNueva)
 
-	print(reloj.get_time())
+x.a()
+b.a()

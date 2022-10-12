@@ -1,21 +1,21 @@
 import pygame
 from pygame.locals import *
-from ship import *
-from draw import *
-from movement import *
 from sys import *
 
+import bin.ship as ship
+import bin.draw as draw
+import bin.movement as movement
 
 
 pygame.init()
 
 window = pygame.display.set_mode((800,600))
 
-fondo = pygame.image.load("Background/Background.png")
+fondo = pygame.image.load("sprites/Background/Background.png")
 window.blit(fondo, (0,0))
 
-player1 = Ship("Right")
-player2 = Ship("Left")
+player1 = ship.Ship("Right")
+player2 = ship.Ship("Left")
 shellsInGame = []
 
 framerateClock = pygame.time.Clock()
@@ -24,8 +24,8 @@ while player1.health > 0 and player2.health > 0:
 
 	keys = pygame.key.get_pressed()
 
-	moveShips(player1, player2, keys)
-	shellsInGame += shoots(player1, player2, keys)
+	movement.moveShips(player1, player2, keys)
+	shellsInGame += movement.shoots(player1, player2, keys)
 
 
 	for event in pygame.event.get():
@@ -34,9 +34,9 @@ while player1.health > 0 and player2.health > 0:
 
 
 	window.blit(fondo, (0,0))
-	drawShips(player1, player2, window)
-	drawShells(shellsInGame, window)
-	moveShells(shellsInGame, player1, player2)
+	draw.drawShips(player1, player2, window)
+	draw.drawShells(shellsInGame, window)
+	movement.moveShells(shellsInGame, player1, player2)
 	
 	pygame.display.flip()
 
